@@ -43,7 +43,7 @@ app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // next("next error")
     (0, sendResponce_1.default)(res, {
         success: true,
-        message: 'Running the Cow hut server',
+        message: 'Running the Slandered server',
         statusCode: 201,
         data: null,
     });

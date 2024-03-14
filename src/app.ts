@@ -16,9 +16,15 @@ import cookieParser from 'cookie-parser';
 const app: Application = express();
 // const port = 3000
 
-app.use(cors());
+app.use(
+  cors({
+    origin: '*',
+    credentials: true,
+    methods: ['GET', 'POST', 'DELETE', 'PATH'],
+  })
+);
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 // Application
@@ -40,7 +46,7 @@ app.get('/', async (req: Request, res: Response) => {
   // next("next error")
   sendResponse(res, {
     success: true,
-    message: 'Running the Cow hut server',
+    message: 'Running the Slandered server',
     statusCode: 201,
     data: null,
   });
