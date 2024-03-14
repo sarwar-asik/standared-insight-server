@@ -19,7 +19,7 @@ let server: Server;
 async function mainFUnction() {
   try {
     await mongoose.connect(config.data_url as string, {
-      dbName: 'Cow-hut',
+      dbName: 'Standard-Insights',
     });
 
     console.log('db Connected successfully '.green.underline.bold);

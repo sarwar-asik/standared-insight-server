@@ -1,10 +1,9 @@
 /* eslint-disable no-console */
 import { Request, Response } from 'express';
-import { User } from './questions.model';
-import { UserService } from './question.services';
+
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponce';
-import { IUser } from './question.interface';
+
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import { Secret } from 'jsonwebtoken';
 
@@ -12,16 +11,19 @@ import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
 import bcrypt from 'bcrypt';
 import config from '../../../config';
+import { QuestionService } from './question.services';
+import { Question } from './questions.model';
+import { IQuestion } from './question.interface';
 
-const createUser = catchAsync(async (req: Request, res: Response) => {
-  const { ...user } = req.body;
-  // console.log(user, 'from controller=================');
+const createQuestion = catchAsync(async (req: Request, res: Response) => {
+  const { ...Question } = req.body;
+  // console.log(Question, 'from controller=================');
 
-  const result = await UserService.createUserServices(user);
+  const result = await QuestionService.createQuestionServices(Question);
   if (result) {
     sendResponse(res, {
       success: true,
-      message: 'successfully create User',
+      message: 'successfully create Question',
       statusCode: 200,
       data: result,
     });
@@ -29,36 +31,36 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
   }
 });
 
-const getALLUser = catchAsync(async (req: Request, res: Response) => {
-  const data = await User.find({});
+const getALLQuestion = catchAsync(async (req: Request, res: Response) => {
+  const data = await Question.find({});
   sendResponse(res, {
     success: true,
-    message: 'successfully get Users',
+    message: 'successfully get Questions',
     statusCode: 200,
     data: data,
   });
 });
 
-const getSingleUser = catchAsync(async (req: Request, res: Response) => {
+const getSingleQuestion = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const result = await UserService.getSingleUser(id);
+  const result = await QuestionService.getSingleQuestion(id);
   // console.log(id,"id");
 
-  sendResponse<IUser>(res, {
+  sendResponse<IQuestion>(res, {
     statusCode: 200,
     success: true,
-    message: 'User retrieved successfully !',
+    message: 'Question retrieved successfully !',
     data: result,
   });
 });
 
-const deleteUser = catchAsync(async (req: Request, res: Response) => {
+const deleteQuestion = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const result = await UserService.deleteUser(id);
+  const result = await QuestionService.deleteQuestion(id);
 
-  sendResponse<IUser>(res, {
+  sendResponse<IQuestion>(res, {
     statusCode: 200,
     success: true,
     message: 'Student deleted successfully !',
@@ -66,12 +68,12 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateUser = catchAsync(async (req: Request, res: Response) => {
+const updateQuestion = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const updatedData = req.body;
-  const result = await UserService.updateUser(id, updatedData);
+  const result = await QuestionService.updateQuestion(id, updatedData);
 
-  sendResponse<IUser>(res, {
+  sendResponse<IQuestion>(res, {
     statusCode: 201,
     success: true,
     message: 'Academic Faculty updated successfully',
@@ -86,19 +88,19 @@ const myProfileController = catchAsync(async (req: Request, res: Response) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, `You are not authorized`);
   }
 
-  const verifiedUser = jwtHelpers.verifyToken(
+  const verifiedQuestion = jwtHelpers.verifyToken(
     token as string,
     config.jwt.secret as Secret
   );
 
-  const id = verifiedUser._id;
+  const id = verifiedQuestion._id;
 
-  const result = await UserService.myProfileServices(id);
+  const result = await QuestionService.myProfileServices(id);
 
-  sendResponse<Partial<IUser>>(res, {
+  sendResponse<Partial<IQuestion>>(res, {
     statusCode: 200,
     success: true,
-    message: "User's information retrieved successfully",
+    message: "Question's information retrieved successfully",
     data: result,
   });
 });
@@ -114,12 +116,12 @@ const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
 
   console.log(token);
 
-  const verifiedUser = jwtHelpers.verifyToken(
+  const verifiedQuestion = jwtHelpers.verifyToken(
     token as string,
     config.jwt.secret as Secret
   );
 
-  const id = verifiedUser?._id;
+  const id = verifiedQuestion?._id;
 
   const updatedData = req.body;
 
@@ -127,22 +129,22 @@ const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
 
   newUpdateData.password = await bcrypt.hash(updatedData?.password, Number(10));
 
-  const result = await UserService.updateMyProfile(id, newUpdateData);
+  const result = await QuestionService.updateMyProfile(id, newUpdateData);
 
-  sendResponse<Partial<IUser>>(res, {
+  sendResponse<Partial<IQuestion>>(res, {
     statusCode: 201,
     success: true,
-    message: 'Users information retrieved successfully',
+    message: 'Questions information retrieved successfully',
     data: result,
   });
 });
 
-export const userController = {
-  createUser,
-  getALLUser,
-  getSingleUser,
-  deleteUser,
-  updateUser,
+export const QuestionController = {
+  createQuestion,
+  getALLQuestion,
+  getSingleQuestion,
+  deleteQuestion,
+  updateQuestion,
   myProfileController,
   updateMyProfile,
 };
