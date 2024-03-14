@@ -20,11 +20,15 @@ router.post(
 
 router.get(
   '/:id',
-  auth(ENUM_USER_ROLE.ADMIN),
+  // auth(ENUM_USER_ROLE.ADMIN),
   AnswerController.getSingleAnswer
 );
 
-router.get('/', auth(ENUM_USER_ROLE.ADMIN), AnswerController.getALLAnswer);
+router.get(
+  '/',
+  // auth(ENUM_USER_ROLE.ADMIN),
+  AnswerController.getALLAnswer
+);
 
 router.delete(
   '/:id',

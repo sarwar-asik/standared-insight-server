@@ -14,7 +14,7 @@ const router = express.Router();
 router.post(
   '/',
   validateRequest(QuestionValidation.createQuestionZodSchema),
-  auth(ENUM_USER_ROLE.ADMIN),
+  // auth(ENUM_USER_ROLE.ADMIN),
   QuestionController.createQuestion
 );
 
@@ -24,7 +24,9 @@ router.get(
   QuestionController.getSingleQuestion
 );
 
-router.get('/', auth(ENUM_USER_ROLE.ADMIN), QuestionController.getALLQuestion);
+router.get('/',
+//  auth(ENUM_USER_ROLE.ADMIN),
+  QuestionController.getALLQuestion);
 
 router.delete(
   '/:id',
