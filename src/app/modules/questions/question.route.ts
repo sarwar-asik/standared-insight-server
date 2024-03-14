@@ -12,7 +12,7 @@ const router = express.Router();
 // it is optional
 
 router.post(
-  '/create-question',
+  '/',
   validateRequest(QuestionValidation.createQuestionZodSchema),
   auth(ENUM_USER_ROLE.ADMIN),
   QuestionController.createQuestion
@@ -31,7 +31,6 @@ router.delete(
   auth(ENUM_USER_ROLE.ADMIN),
   QuestionController.deleteQuestion
 );
-
 
 router.patch(
   '/:id',
