@@ -1,15 +1,14 @@
 import express from 'express';
-import { UserRouter } from '../modules/USER/user.route';
 
-
+import { questionRouter } from '../modules/questions/question.route';
 
 const router = express.Router();
 
 const modulesRoutes = [
   {
-    path: '/users',
-    route: UserRouter,
-  }
+    path: '/question',
+    route: questionRouter,
+  },
 ];
 
 modulesRoutes.forEach(route => router.use(route.path, route.route));
